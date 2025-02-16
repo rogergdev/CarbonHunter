@@ -4,6 +4,9 @@
 
 ---
 
+Este es el sensor que he usado:
+
+
 ## 📡 Conexión del hardware
 
 **Placa:** ESP32-S3 DevKitC  
