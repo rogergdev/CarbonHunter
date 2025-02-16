@@ -109,7 +109,7 @@ mode
 Si el sensor no responde, usa:
 
 ```bash
-esphome logs carbonhunter.yaml --device COM
+esphome logs carbonhunter.yaml --device COMCONECTADO
 ```
 
 ### ⚠️ Errores comunes
