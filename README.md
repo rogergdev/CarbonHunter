@@ -10,7 +10,12 @@ Este es el sensor que he usado:
 ## 📡 Conexión del hardware
 
 **Placa:** ESP32-S3 DevKitC  
+![PlacaESP32-S3](https://github.com/user-attachments/assets/42622657-db03-40b7-9780-662f0f9d436f)
+
 **Sensor:** SCD41 (I2C)  
+![SensorSCD41](https://github.com/user-attachments/assets/1e9cc918-5c90-4bf2-b115-dc7bbb817aa9)
+
+
 
 | **SCD41** | **ESP32-S3** | **Color sugerido** |
 |-----------|--------------|--------------------|
