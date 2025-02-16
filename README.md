@@ -34,8 +34,8 @@ esphome:
   board: esp32-s3-devkitc-1
 
 wifi:
-  ssid: "Camelot"
-  password: "8K[Z7x~C\"NW:AsagrRKb"
+  ssid: "TuWifi"
+  password: "LaClaveDeTuWifi"
 
 api:
 
@@ -53,7 +53,7 @@ i2c:
 
 sensor:
   - platform: scd4x
-    update_interval: 5s
+    update_interval: 30s
     co2:
       name: "CarbonHunter CO2"
       unit_of_measurement: "ppm"
@@ -63,21 +63,28 @@ sensor:
     humidity:
       name: "CarbonHunter Humedad"
       unit_of_measurement: "%"
-
 ```
 
 ---
 
 ## 📲 Instalación y despliegue
 
-1. Conecta el ESP32-S3 al PC.
-2. Abre una terminal y ejecuta:
+### 🖥️ Preparar la placa
+
+Para flashear el firmware en la **ESP32-S3**, sigue estos pasos:
+
+1. Con la placa **Desconectada**.
+2. **Mantén pulsado el botón BOOT** de la placa.
+3. **Mientras mantienes BOOT pulsado**, contecta la placa al usb y después de 5 segundos suéltalo.
+4. Inicia la carga del firmware con el siguiente comando:
 
 ```bash
 esphome run carbonhunter.yaml --device COM7
 ```
 
-3. Una vez flasheado, el dispositivo se conectará automáticamente a Home Assistant.
+6. Una vez completada la carga, **reinicia la placa** sin mantener pulsado el botón **BOOT** para que arranque normalmente.
+
+7. El dispositivo se conectará automáticamente a Home Assistant.
 
 ---
 
@@ -85,15 +92,16 @@ esphome run carbonhunter.yaml --device COM7
 
 ### 🧪 Verificar comunicación I2C
 
+Para ver a que puerto está conectado:
+
+```bash
+mode
+```
+
 Si el sensor no responde, usa:
 
 ```bash
-esphome logs carbonhunter.yaml --device COM7
-```
-
-**Resultado esperado:**
-```
-[I][i2c.arduino:XXX]: Found i2c device at address 0x62
+esphome logs carbonhunter.yaml --device COM
 ```
 
 ### ⚠️ Errores comunes
@@ -106,6 +114,30 @@ esphome logs carbonhunter.yaml --device COM7
 | El sensor muestra 400 ppm constante                | Calibración inicial                | Déjalo encendido **30 min en aire limpio**. |
 | LED integrado no responde                          | Pin incorrecto                     | Cambiar **GPIO2** por **GPIO13**.           |
 
+---
+
+## ⚠️ Consideraciones sobre el `update_interval`
+
+Ajustar el `update_interval` del sensor SCD41 a **1 segundo** puede generar problemas importantes debido a las características del sensor.  
+
+### 🚨 **Riesgos de usar 1s**:
+
+- **Mayor desgaste del sensor**:  
+  El SCD41 está diseñado para realizar lecturas periódicas, no constantes.  
+  Forzarlo a medir cada segundo puede **acortar su vida útil**.  
+
+- **Aumento del consumo de energía**:  
+  El sensor utiliza un **láser de infrarrojos** para medir el CO₂, lo que aumenta significativamente el consumo si se actualiza cada segundo.  
+
+- **Inexactitud por falta de estabilización**:  
+  El sensor necesita **tiempo para estabilizarse** entre mediciones. Con actualizaciones muy frecuentes, las lecturas pueden ser erráticas.  
+
+- **Saturación de Home Assistant**:  
+  Actualizar cada segundo genera una carga innecesaria de datos, ralentizando el sistema.  
+
+### ✅ **Recomendación**:
+- **Mínimo seguro**: **5 segundos**.  
+- **Óptimo**: **30 segundos** para obtener datos estables y precisos.  
 ---
 
 ## 💡 Notas adicionales
